@@ -1,0 +1,3 @@
+base58
+requests
+python-graphql-client
