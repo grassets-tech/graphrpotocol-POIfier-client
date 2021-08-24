@@ -214,19 +214,21 @@ def getPoiReport(subgraphs, epoch_block_range, block_hash_range, args):
     return poi_report
 
 def main():
-    args = parseArguments()
-    current_epoch = getCurrentEpoch(args.mainnet_subgraph_endpoint)
-    current_block = getCurrentBlock(args.ethereum_endpoint)
-    subgraphs = getSubgraphs(args.indexer_id, args.indexer_graph_node_endpoint)
-    epoch_range = range(current_epoch-9, current_epoch+1)
-    block_range = [(current_block // 1000 - i) * 1000 for i in range(0,10)]
-    epoch_block_range = getEpochBlockRange(epoch_range, args)
-    block_hash_range = getBlockHashRange(block_range, args)
-    poi_report = getPoiReport(subgraphs, epoch_block_range, block_hash_range, args)
-
-    for item in poi_report:
-        logging.info(item)
-    uploadPoi(args, poi_report)
+    while True:
+        time.sleep(15)
+        args = parseArguments()
+        current_epoch = getCurrentEpoch(args.mainnet_subgraph_endpoint)
+        current_block = getCurrentBlock(args.ethereum_endpoint)
+        subgraphs = getSubgraphs(args.indexer_id, args.indexer_graph_node_endpoint)
+        epoch_range = range(current_epoch-9, current_epoch+1)
+        block_range = [(current_block // 1000 - i) * 1000 for i in range(0,10)]
+        epoch_block_range = getEpochBlockRange(epoch_range, args)
+        block_hash_range = getBlockHashRange(block_range, args)
+        poi_report = getPoiReport(subgraphs, epoch_block_range, block_hash_range, args)
+        for item in poi_report:
+            logging.info(item)
+        uploadPoi(args, poi_report)
+        time.sleep(14400) # Run script every 4 hrs
 
 if __name__ == "__main__":
     main()
