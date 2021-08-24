@@ -22,16 +22,20 @@ import syslog
 # pip3 install python-graphql-client
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 INDEXER_REF = '0x0000000000000000000000000000000000000000'
-POI_SERVER = 'https://poi-hub-9mwaq.ondigitalocean.app/api/poi'
 
 def parseArguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--indexer_graph_node_endpoint',
         help='graph-node endpoint, e.g.: http://index-node-0:8030/graphql',
-        required=True,
+        default='http://index-node-0:8030/graphql',
         type=str)
     parser.add_argument('--poifier_token',
         help='token, request token via portal',
+        required=True,
+        type=str)
+    parser.add_argument('--poifier_server',
+        help='token, request token via portal',
+        default='https://poi-hub-9mwaq.ondigitalocean.app/api/poi',
         required=True,
         type=str)
     parser.add_argument('--mainnet_subgraph_endpoint',
@@ -175,7 +179,7 @@ def uploadPoi(args, report):
     "token": token
     }
     try:
-        r = requests.post(url, headers=headers, json=report)
+        r = requests.post(args.poifier_server, headers=headers, json=report)
     except Exception as e:
         logging.error('Failed to upload POI report {}'.format(e))
     if r.status_code != 200:
