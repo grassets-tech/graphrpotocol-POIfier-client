@@ -174,7 +174,7 @@ def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_end
     return poi
 
 def uploadPoi(args, report):
-    token = '{}:{}'.format(args.indexer_id, args.token)
+    token = '{}:{}'.format(args.indexer_id, args.poifier_token)
     headers = {
     "Content-Type": "application/json",
     "token": token
