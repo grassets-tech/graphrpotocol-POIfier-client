@@ -15,7 +15,6 @@ import glob
 import json
 import time
 import logging
-import syslog
 
 # pip3 install base58
 # pip3 install python-graphql-client
@@ -46,7 +45,7 @@ def parseArguments():
         type=str)
     return parser.parse_args()
 
-def getSubgraphs(indexer_id, graphql_endpoint):
+def getSubgraphs(graphql_endpoint):
     client = GraphqlClient(endpoint=graphql_endpoint)
     subgraphs = []
     query = "{indexingStatuses {node synced subgraph health}}"
@@ -152,7 +151,7 @@ def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_end
                               block_number=block_number,
                               block_hash=block_hash,
                               indexer_id=indexer_id)
-    syslog.syslog(syslog.LOG_INFO, 'Quering POI endpoint: {} query: {}'.format(graphql_endpoint, query))
+    logging.info('Quering POI endpoint: {} query: {}'.format(graphql_endpoint, query))
     try:
         data = client.execute(query=query)
     except requests.exceptions.RequestException as e:
@@ -167,7 +166,7 @@ def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_end
         sys.exit()
     poi = data['data']['proofOfIndexing']
     if not poi:
-        syslog.info('Warning: no POI found for subgraph {}'.format(subgraph_ipfs_hash))
+        logging.info('Warning: no POI found for subgraph {}'.format(subgraph_ipfs_hash))
     return poi
 
 def uploadPoi(args, report):
@@ -213,11 +212,10 @@ def getPoiReport(subgraphs, epoch_block_range, block_hash_range, args):
 
 def main():
     while True:
-        time.sleep(15)
         args = parseArguments()
         current_epoch = getCurrentEpoch(args.mainnet_subgraph_endpoint)
         current_block = getCurrentBlock(args.ethereum_endpoint)
-        subgraphs = getSubgraphs(args.indexer_id, args.indexer_graph_node_endpoint)
+        subgraphs = getSubgraphs(args.indexer_graph_node_endpoint)
         epoch_range = range(current_epoch-9, current_epoch+1)
         block_range = [(current_block // 1000 - i) * 1000 for i in range(0,10)]
         epoch_block_range = getEpochBlockRange(epoch_range, args)
