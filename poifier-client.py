@@ -30,10 +30,6 @@ def parseArguments():
         help='graph-node endpoint, e.g.: http://index-node-0:8030/graphql',
         required=True,
         type=str)
-    parser.add_argument('--indexer_id',
-        help='indexer_id, shoudl be small chars e.g.: 0x1234abc...',
-        required=True,
-        type=str)
     parser.add_argument('--poifier_token',
         help='token, request token via portal',
         required=True,
