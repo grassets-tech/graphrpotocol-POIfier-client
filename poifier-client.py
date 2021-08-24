@@ -31,6 +31,10 @@ def parseArguments():
         help='token, request token via portal',
         required=True,
         type=str)
+    parser.add_argument('--indexer_id',
+        help='indexer ID, e.g.: 0x010234..',
+        required=True,
+        type=str)
     parser.add_argument('--poifier_server',
         help='token, request token via portal',
         default='https://poi-hub-9mwaq.ondigitalocean.app/api/poi',
