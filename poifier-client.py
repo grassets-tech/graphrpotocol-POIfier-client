@@ -9,7 +9,6 @@ import argparse
 import requests
 from python_graphql_client import GraphqlClient
 from string import Template
-import base58
 import sys
 import os
 import glob
