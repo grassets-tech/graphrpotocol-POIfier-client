@@ -36,7 +36,6 @@ def parseArguments():
     parser.add_argument('--poifier_server',
         help='token, request token via portal',
         default='https://poi-hub-9mwaq.ondigitalocean.app/api/poi',
-        required=True,
         type=str)
     parser.add_argument('--mainnet_subgraph_endpoint',
         help='graph network endpoint (default: %(default)s)',
