@@ -11,15 +11,14 @@ from python_graphql_client import GraphqlClient
 from string import Template
 import sys
 import os
-import glob
 import json
 import time
 import logging
 
-# pip3 install base58
-# pip3 install python-graphql-client
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 INDEXER_REF = '0x0000000000000000000000000000000000000000'
+LAST_N_EPOCH = 10
+LAST_N_1K_BLOCK = 10
 
 def parseArguments():
     parser = argparse.ArgumentParser()
@@ -173,18 +172,21 @@ def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_end
         logging.info('Warning: no POI found for subgraph {}'.format(subgraph_ipfs_hash))
     return poi
 
-def uploadPoi(args, report):
-    token = '{}:{}'.format(args.indexer_id, args.poifier_token)
+def uploadPoi(poifier_server_url, token, report):
+    #token = '{}:{}'.format(args.indexer_id, args.poifier_token)
     headers = {
     "Content-Type": "application/json",
     "token": token
     }
     try:
-        r = requests.post(args.poifier_server, headers=headers, json=report)
+        r = requests.post(poifier_server_url, headers=headers, json=report)
     except Exception as e:
         logging.error('Failed to upload POI report {}'.format(e))
+        return
     if r.status_code != 200:
         logging.error('Failed to upload POI report {}'.format(r.status_code))
+        return
+    logging.info('POI report uploaded to poifier-server: {}'.format(poifier_server_url))
 
 def getEpochBlockRange(epoch_range, args):
     epoch_block_range = []
@@ -220,14 +222,15 @@ def main():
         current_epoch = getCurrentEpoch(args.mainnet_subgraph_endpoint)
         current_block = getCurrentBlock(args.ethereum_endpoint)
         subgraphs = getSubgraphs(args.indexer_graph_node_endpoint)
-        epoch_range = range(current_epoch-9, current_epoch+1)
-        block_range = [(current_block // 1000 - i) * 1000 for i in range(0,10)]
+        epoch_range = range(current_epoch-(LAST_N_EPOCH-1), current_epoch+1)
+        block_range = [(current_block // 1000 - i) * 1000 for i in range(0,LAST_N_1K_BLOCK)]
         epoch_block_range = getEpochBlockRange(epoch_range, args)
         block_hash_range = getBlockHashRange(block_range, args)
         poi_report = getPoiReport(subgraphs, epoch_block_range, block_hash_range, args)
+        logging.info('POI summary:')
         for item in poi_report:
             logging.info(item)
-        uploadPoi(args, poi_report)
+        uploadPoi(args.poifier_server, args.poifier_token, poi_report)
         time.sleep(14400) # Run script every 4 hrs
 
 if __name__ == "__main__":
