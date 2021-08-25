@@ -1,0 +1,17 @@
+version: '2.1'
+
+networks:
+  monitor-net:
+    driver: bridge
+services:
+  poifier-client:
+    container_name: poifier-client
+    image: grassets/poifier-client
+    networks:
+       - monitor-net
+    restart: unless-stopped
+    tty: true
+    command:
+      - '--poifier_token=<TOKEN>'
+      - '--indexer_id=<INDEXER>'
+      - '--ethereum_endpoint=<ETHEREUM_ENDPOINT>'
