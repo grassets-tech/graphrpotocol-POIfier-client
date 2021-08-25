@@ -6,7 +6,7 @@ Python3 script to get all deployments from graph-node and upload POI using refer
 docker pull ghcr.io/grassets-tech/poifier-client
 
 ## Docker compose
-see docker-compose.yml file as an example provided
+see `docker-compose.yml` file as an example provided
 
 ## Usage example:
 
