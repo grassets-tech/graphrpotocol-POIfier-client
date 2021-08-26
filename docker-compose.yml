@@ -12,6 +12,8 @@ services:
     restart: unless-stopped
     tty: true
     command:
-      - '--poifier_token=<TOKEN>'
-      - '--indexer_id=<INDEXER>'
+      - '--poifier_token=<POIFIER_TOKEN>'
+      - '--poifier_server=POIFIER_SERVER'
       - '--ethereum_endpoint=<ETHEREUM_ENDPOINT>'
+      - '--mainnet_subgraph_endpoint=<MAINNET_GRAPH_SUBGRAPH>'
+      - '--indexer_graph_node_endpoint=<GRAPH_NODE_ENDPOINT>'
