@@ -175,16 +175,16 @@ def uploadPoi(poifier_server_url, token, report):
     "Content-Type": "application/json",
     "token": token
     }
-    poifier_server_url_api = urljoin(poifier_server_url, '/api')
+    poifier_server_url_api = urljoin(poifier_server_url, '/api/poi')
     try:
         r = requests.post(poifier_server_url_api, headers=headers, json=report)
     except Exception as e:
         logging.error('Failed to upload POI report {}'.format(e))
         return
     if r.status_code != 200:
-        logging.error('Failed to upload POI report {}'.format(r.status_code))
+        logging.error('Failed to upload POI report to poifier-server: {}, Error: {}, {}'.format(poifier_server_url_api, r.status_code, r.text))
         return
-    logging.info('POI report uploaded to poifier-server: {}'.format(poifier_server_url))
+    logging.info('POI report uploaded to poifier-server: {}'.format(poifier_server_url_api))
 
 def getEpochBlockRange(epoch_range, args):
     epoch_block_range = []
@@ -207,7 +207,7 @@ def getPoiReport(subgraphs, epoch_block_range, block_hash_range, args):
         for epoch in epoch_block_range:
             poi = getPoi(INDEXER_REF, epoch['block'], epoch['hash'], subgraph['subgraph'], args.indexer_graph_node_endpoint)
             if poi:
-                poi_report.append({'epoch':epoch['epoch'], 'deployment': subgraph['subgraph'], 'poi': poi})
+                poi_report.append({'epoch':epoch['epoch'], 'block': epoch['block'], 'deployment': subgraph['subgraph'], 'poi': poi})
         for block in block_hash_range:
             poi = getPoi(INDEXER_REF, block['block'], block['hash'], subgraph['subgraph'], args.indexer_graph_node_endpoint)
             if poi:
