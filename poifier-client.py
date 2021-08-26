@@ -1,45 +1,43 @@
 ########################################################################
-# POIfier-client - script to upload POI to POIFier POIfier-server
+# POIfier-client - script to upload POI to POIfier-server
 # author: Grassets-tech
 # contact: contact@grassets.tech
 ########################################################################
 #!/usr/bin/env python3
 
-import argparse
-import requests
 from python_graphql_client import GraphqlClient
 from string import Template
-import sys
-import os
+from urllib.parse import urljoin
+import argparse
 import json
-import time
 import logging
+import os
+import requests
+import sys
+import time
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 INDEXER_REF = '0x0000000000000000000000000000000000000000'
 LAST_N_EPOCH = 10
 LAST_N_1K_BLOCK = 10
+SLEEP = 14400 # Run script every 4 hrs
 
 def parseArguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--indexer_graph_node_endpoint',
-        help='graph-node endpoint, e.g.: http://index-node-0:8030/graphql',
+        help='Graph-node endpoint, (default: %(default)s)',
         default='http://index-node-0:8030/graphql',
         type=str)
     parser.add_argument('--poifier_token',
-        help='token, request token via portal',
-        required=True,
-        type=str)
-    parser.add_argument('--indexer_id',
-        help='indexer ID, e.g.: 0x010234..',
+        help='Auth token, request token via POIfier portal',
         required=True,
         type=str)
     parser.add_argument('--poifier_server',
-        help='token, request token via portal',
-        default='https://poi-hub-9mwaq.ondigitalocean.app/api/poi',
+        help='URL of POIfier server (default: %(default)s)',
+        default='https://api.poifier.io',
         type=str)
     parser.add_argument('--mainnet_subgraph_endpoint',
-        help='graph network endpoint (default: %(default)s)',
+        help='Graph network endpoint (default: %(default)s)',
         default='https://gateway.network.thegraph.com/network',
         type=str)
     parser.add_argument('--ethereum_endpoint',
@@ -75,7 +73,7 @@ def getCurrentEpoch(subgraph_endpoint):
     except requests.exceptions.RequestException as e:
         logging.error('Can\'t get current Epoch, check endpoint {}'.format(e))
         sys.exit()
-    if data.get("errors"):
+    if data.get('errors'):
         logging.error('Can\'t get current Epoch, check query {}'.format(data))
         sys.exit()
     logging.info('Received currentEpoch data: {}'.format(data))
@@ -91,7 +89,7 @@ def getStartBlock(epoch, subgraph_endpoint):
     except requests.exceptions.RequestException as e:
         logging.error('Can\'t get startBlock, check endpoint {}'.format(e))
         sys.exit()
-    if data.get("errors"):
+    if data.get('errors'):
         logging.error('Can\'t get startBlock, check query {}'.format(data))
         sys.exit()
     logging.info('Received startBlock data: {}'.format(data))
@@ -110,14 +108,14 @@ def getBlockHash(block_number, ethereum_endpoint):
     except requests.exceptions.RequestException as e:
         logging.error('Can\'t get Block hash, check connection {}'.format(e))
         sys.exit()
-    if response.get("error"):
+    if response.get('error'):
         logging.error('Can\'t get Block hash, check endpoint {}'.format(response))
         sys.exit()
-    if not response.get("result"):
+    if not response.get('result'):
         logging.error('Can\'t get Block hash, check block number {}'.format(response))
         sys.exit()
-    logging.info('Received Block hash: {}'.format(response["result"]["hash"]))
-    return response["result"]["hash"]
+    logging.info('Received Block hash: {}'.format(response['result']['hash']))
+    return response['result']['hash']
 
 def getCurrentBlock(ethereum_endpoint):
     payload = {
@@ -131,13 +129,13 @@ def getCurrentBlock(ethereum_endpoint):
     except requests.exceptions.RequestException as e:
         logging.error('Can\'t get Block, check connection {}'.format(e))
         sys.exit()
-    if response.get("error"):
+    if response.get('error'):
         logging.error('Can\'t get Block, check endpoint {}'.format(response))
         sys.exit()
-    if not response.get("result"):
+    if not response.get('result'):
         logging.error('Can\'t get Block {}'.format(response))
         sys.exit()
-    logging.info('Received Block: {}'.format(response.get("result")))
+    logging.info('Received Block: {}'.format(response.get('result')))
     return int(response['result'], 16)
 
 def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_endpoint):
@@ -173,13 +171,13 @@ def getPoi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_end
     return poi
 
 def uploadPoi(poifier_server_url, token, report):
-    #token = '{}:{}'.format(args.indexer_id, args.poifier_token)
     headers = {
     "Content-Type": "application/json",
     "token": token
     }
+    poifier_server_url_api = urljoin(poifier_server_url, '/api')
     try:
-        r = requests.post(poifier_server_url, headers=headers, json=report)
+        r = requests.post(poifier_server_url_api, headers=headers, json=report)
     except Exception as e:
         logging.error('Failed to upload POI report {}'.format(e))
         return
@@ -216,6 +214,11 @@ def getPoiReport(subgraphs, epoch_block_range, block_hash_range, args):
                 poi_report.append({'block':block['block'], 'deployment': subgraph['subgraph'], 'poi': poi})
     return poi_report
 
+def getSummary(poi_report):
+    deployments_count = len(set([i['deployment'] for i in poi_report]))
+    records_count = len(poi_report)
+    return deployments_count, records_count
+
 def main():
     while True:
         args = parseArguments()
@@ -227,11 +230,11 @@ def main():
         epoch_block_range = getEpochBlockRange(epoch_range, args)
         block_hash_range = getBlockHashRange(block_range, args)
         poi_report = getPoiReport(subgraphs, epoch_block_range, block_hash_range, args)
-        logging.info('POI summary:')
+        logging.info('POI summary: deployments: {}, records: {}'.format(*getSummary(poi_report)))
         for item in poi_report:
             logging.info(item)
         uploadPoi(args.poifier_server, args.poifier_token, poi_report)
-        time.sleep(14400) # Run script every 4 hrs
+        time.sleep(SLEEP)
 
 if __name__ == "__main__":
     main()
