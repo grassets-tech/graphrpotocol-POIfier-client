@@ -24,24 +24,29 @@ SLEEP = 14400 # Run script every 4 hrs
 
 def parseArguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--indexer_graph_node_endpoint',
-        help='Graph-node endpoint, (default: %(default)s)',
+    parser.add_argument('--graph-node-status-endpoint',
+        dest='graph_node_status_endpoint',
+        help='Graph-node status endpoint, (default: %(default)s)',
         default='http://index-node-0:8030/graphql',
         type=str)
-    parser.add_argument('--poifier_token',
+    parser.add_argument('--poifier-token',
+        dest='poifier_token',
         help='Auth token, request token via POIfier portal',
         required=True,
         type=str)
-    parser.add_argument('--poifier_server',
+    parser.add_argument('--poifier-server',
+        dest='poifier_server',
         help='URL of POIfier server (default: %(default)s)',
         default='https://api.poifier.io',
         type=str)
-    parser.add_argument('--mainnet_subgraph_endpoint',
-        help='Graph network endpoint (default: %(default)s)',
+    parser.add_argument('--mainnet-subgraph-endpoint',
+        dest='mainnet_subgraph_endpoint',
+        help='Graph mainnet network endpoint (default: %(default)s)',
         default='https://gateway.network.thegraph.com/network',
         type=str)
-    parser.add_argument('--ethereum_endpoint',
-        help='ethereum endpoint to request block hash (default: %(default)s)',
+    parser.add_argument('--ethereum-endpoint',
+        dest='ethereum_endpoint',
+        help='Ethereum endpoint to get block hash (default: %(default)s)',
         default='https://eth-mainnet.alchemyapi.io/v2/demo',
         type=str)
     return parser.parse_args()
@@ -205,11 +210,11 @@ def getPoiReport(subgraphs, epoch_block_range, block_hash_range, args):
     poi_report = []
     for subgraph in subgraphs:
         for epoch in epoch_block_range:
-            poi = getPoi(INDEXER_REF, epoch['block'], epoch['hash'], subgraph['subgraph'], args.indexer_graph_node_endpoint)
+            poi = getPoi(INDEXER_REF, epoch['block'], epoch['hash'], subgraph['subgraph'], args.graph_node_status_endpoint)
             if poi:
                 poi_report.append({'epoch':epoch['epoch'], 'block': epoch['block'], 'deployment': subgraph['subgraph'], 'poi': poi})
         for block in block_hash_range:
-            poi = getPoi(INDEXER_REF, block['block'], block['hash'], subgraph['subgraph'], args.indexer_graph_node_endpoint)
+            poi = getPoi(INDEXER_REF, block['block'], block['hash'], subgraph['subgraph'], args.graph_node_status_endpoint)
             if poi:
                 poi_report.append({'block':block['block'], 'deployment': subgraph['subgraph'], 'poi': poi})
     return poi_report
@@ -224,7 +229,7 @@ def main():
         args = parseArguments()
         current_epoch = getCurrentEpoch(args.mainnet_subgraph_endpoint)
         current_block = getCurrentBlock(args.ethereum_endpoint)
-        subgraphs = getSubgraphs(args.indexer_graph_node_endpoint)
+        subgraphs = getSubgraphs(args.graph_node_status_endpoint)
         epoch_range = range(current_epoch-(LAST_N_EPOCH-1), current_epoch+1)
         block_range = [(current_block // 1000 - i) * 1000 for i in range(0,LAST_N_1K_BLOCK)]
         epoch_block_range = getEpochBlockRange(epoch_range, args)
