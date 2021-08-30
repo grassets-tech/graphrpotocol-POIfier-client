@@ -42,11 +42,11 @@ services:
     restart: unless-stopped
     tty: true
     command:
-      - '--poifier_token=<POIFIER_TOKEN>'
-      - '--poifier_server=POIFIER_SERVER'
-      - '--ethereum_endpoint=<ETHEREUM_ENDPOINT>'
-      - '--mainnet_subgraph_endpoint=<MAINNET_GRAPH_SUBGRAPH>'
-      - '--indexer_graph_node_endpoint=<GRAPH_NODE_ENDPOINT>'
+      - '--poifier-token=<POIFIER_TOKEN>'
+      - '--poifier-server=POIFIER_SERVER'
+      - '--ethereum-endpoint=<ETHEREUM_ENDPOINT>'
+      - '--mainnet-subgraph-endpoint=<MAINNET_GRAPH_SUBGRAPH>'
+      - '--graph-node-status-endpoint=<GRAPH_NODE_ENDPOINT>'
 
 ```
 
@@ -59,16 +59,16 @@ usage: poifier-client.py [-h] [--indexer_graph_node_endpoint INDEXER_GRAPH_NODE_
 
 optional arguments:
   -h, --help            show this help message and exit
-  --indexer_graph_node_endpoint INDEXER_GRAPH_NODE_ENDPOINT
-                        Graph-node endpoint, (default: http://index-node-0:8030/graphql)
-  --poifier_token POIFIER_TOKEN
+  --graph-node-status-endpoint INDEXER_GRAPH_NODE_ENDPOINT
+                        Graph-node status endpoint, (default: http://index-node-0:8030/graphql)
+  --poifier-token POIFIER_TOKEN
                         Auth token, request token via POIfier portal
-  --poifier_server POIFIER_SERVER
+  --poifier-server POIFIER_SERVER
                         URL of POIfier server (default: https://api.poifier.io)
-  --mainnet_subgraph_endpoint MAINNET_SUBGRAPH_ENDPOINT
+  --mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT
                         Graph network endpoint (default: https://gateway.network.thegraph.com/network)
-  --ethereum_endpoint ETHEREUM_ENDPOINT
-                        ethereum endpoint to request block hash (default: https://eth-mainnet.alchemyapi.io/v2/demo)
+  --ethereum-endpoint ETHEREUM_ENDPOINT
+                        Ethereum endpoint to get block hash (default: https://eth-mainnet.alchemyapi.io/v2/demo)
 ```
 
 HINT:
