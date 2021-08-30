@@ -54,12 +54,12 @@ services:
 
 ```bash
 $ python3 poifier-client.py --help
-usage: poifier-client.py [-h] [--indexer_graph_node_endpoint INDEXER_GRAPH_NODE_ENDPOINT] --poifier_token POIFIER_TOKEN [--poifier_server POIFIER_SERVER]
-                         [--mainnet_subgraph_endpoint MAINNET_SUBGRAPH_ENDPOINT] [--ethereum_endpoint ETHEREUM_ENDPOINT]
+usage: poifier-client.py [-h] [--graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT] --poifier-token POIFIER_TOKEN [--poifier-server POIFIER_SERVER]
+                         [--mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT] [--ethereum-endpoint ETHEREUM_ENDPOINT]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --graph-node-status-endpoint INDEXER_GRAPH_NODE_ENDPOINT
+  --graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT
                         Graph-node status endpoint, (default: http://index-node-0:8030/graphql)
   --poifier-token POIFIER_TOKEN
                         Auth token, request token via POIfier portal
