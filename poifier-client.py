@@ -37,7 +37,7 @@ def parseArguments():
     parser.add_argument('--poifier-server',
         dest='poifier_server',
         help='URL of POIfier server (default: %(default)s)',
-        default='https://api.poifier.io',
+        default='https://poifier.io',
         type=str)
     parser.add_argument('--mainnet-subgraph-endpoint',
         dest='mainnet_subgraph_endpoint',
