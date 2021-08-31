@@ -64,7 +64,7 @@ optional arguments:
   --poifier-token POIFIER_TOKEN
                         Auth token, request token via POIfier portal
   --poifier-server POIFIER_SERVER
-                        URL of POIfier server (default: https://api.poifier.io)
+                        URL of POIfier server (default: https://poifier.io)
   --mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT
                         Graph network endpoint (default: https://gateway.network.thegraph.com/network)
   --ethereum-endpoint ETHEREUM_ENDPOINT
