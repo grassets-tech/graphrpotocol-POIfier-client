@@ -1,4 +1,8 @@
 # POIfier-client
+![made-with-python](https://img.shields.io/badge/made%20with-Python3-1f425f.svg)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/grassets/poifier-client?color=green)
+![image version](https://img.shields.io/docker/v/grassets/poifier-client?sort=semver)
+![Docker Image Pulls](https://img.shields.io/docker/pulls/grassets/poifier-client.svg)
 
 Python3 deamon to get all deployments being indexed by graph-node and upload their POI (Proof-of-indexing) using referenced INDEXER_ID to the POIfier-server
 
