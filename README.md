@@ -22,7 +22,7 @@ The main goal of this project is to help Graphprotocol Indexer to verify consist
 
 # How to use
 
- - **The Graph MIPs Indexers**: please follow [POIfier for MIPS](https://github.com/grassets-tech/graphrpotocol-POIfier-client/tree/main/MIPs)
+ - **The Graph MIPs Indexers**: please follow [POIfier for MIPS](https://github.com/grassets-tech/graphrpotocol-POIfier-client/blob/main/MIPs/poifier-client-mips.md)
 
 ![image](https://user-images.githubusercontent.com/82155440/202034773-33b82d22-ef89-485f-a649-c6d3a4b1037c.png)
 
