@@ -1,6 +1,8 @@
 # MIPS POIfier-client
 Python3 deamon to get all deployments being indexed by graph-node and upload their POI (Proof-of-indexing) using referenced INDEXER_ID to the POIfier-server
 
+**POIfier on MAINNET** - https://github.com/grassets-tech/graphrpotocol-POIfier-client
+
 ## What is MIPs
 Please follow this link https://thegraph.com/blog/mips-multi-chain-indexing-incentivized-program/
 
