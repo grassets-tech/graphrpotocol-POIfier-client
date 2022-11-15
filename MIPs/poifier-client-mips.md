@@ -4,6 +4,9 @@ Python3 deamon to get all deployments being indexed by graph-node and upload the
 ## What is MIPs
 Please follow this link https://thegraph.com/blog/mips-multi-chain-indexing-incentivized-program/
 
+![image](https://user-images.githubusercontent.com/82155440/202035124-43eb5580-92ca-4b9d-9bf3-bca3fd8dd546.png)
+
+
 # Goal
 
 The main goal of this project is to help Graphprotocol Indexer to verify consistency of their indexed data by uploading POI (Proof-of-indexing) data to POIfier-server periodically.
@@ -50,6 +53,27 @@ services:
       - '--graph-node-status-endpoint=<GRAPH_NODE_ENDPOINT>'
 ```
 
+## Docker compose example
+
+```
+services:
+
+  poifier-client:
+    container_name: poifier-client
+    image: grassets/poifier-client
+    networks:
+       - monitor-net
+    restart: unless-stopped
+    tty: true
+    command:
+      - '--poifier-token=0x458xxxx1c'
+      - '--ethereum-endpoint=https://eth-qoerli.alchemyapi.io/v2/demo'
+      - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
+      - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
+      - '--poifier-server=https://poifier.io'
+
+```
+
 ## How to run
 
 ```bash
@@ -76,6 +100,8 @@ HINT:
 > So, in case of docker infrastructure key would be similar to:
 > * `--mainnet_subgraph_endpoint http://query-node-0:8000/subgraphs/id/Qmf5XXWA8zhHbdvWqtPcR3jFkmb5FLR4MAefEYx8E3pHfr`
 
+## How to get "poifier-token"
+Please loging with your Metamask on site https://poifier.io
 
 # Requirements
 
