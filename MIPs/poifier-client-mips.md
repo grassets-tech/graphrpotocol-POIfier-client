@@ -76,25 +76,35 @@ services:
 
 ```
 
-## How to run
+## Docker compose with .env example 
 
-```bash
-$ python3 poifier-client.py --help
-usage: poifier-client.py [-h] [--graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT] --poifier-token RYABINA_GOERLI_POIFIER_TOKEN [--poifier-server RYABINA_GOERLI_POIFIER_SERVER]
-                         [--mainnet-subgraph-endpoint MIPS_GOERLI_MAIN_SUBGRAPH] [--ethereum-endpoint GOERLI_ENDPOINT]
+**more .env**
+```
+TOKEN=0x458xxxx1c
+ETH_ENDPOINT=https://eth-qoerli.alchemyapi.io/v2/demo
+SUBGRAPH_ENDPOINT=https://gateway.testnet.thegraph.com/network
+GRAPH_NODE=http://index-node-0:8030/graphql
+POI_SERVER=https://poifier.io
+```
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT
-                        Graph-node status endpoint, (default: http://index-node-0:8030/graphql)
-  --poifier-token POIFIER_TOKEN
-                        Auth token, request token via POIfier portal
-  --poifier-server POIFIER_SERVER
-                        URL of POIfier server (default: https://poifier.io)
-  --mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT
-                        Graph network endpoint (default: https://gateway.network.thegraph.com/network)
-  --ethereum-endpoint ETHEREUM_ENDPOINT
-                        Ethereum endpoint to get block hash (default: https://eth-mainnet.alchemyapi.io/v2/demo)
+**more docker-compose.ymml**
+```
+services:
+
+  poifier-client:
+    container_name: poifier-client
+    image: grassets/poifier-client
+    networks:
+       - monitor-net
+    restart: unless-stopped
+    tty: true
+    command:
+      - '--poifier-token=${TOKEN}'
+      - '--ethereum-endpoint=${ETH_ENDPOINT}'
+      - '--mainnet-subgraph-endpoint=${SUBGRAPH_ENDPOINT}'
+      - '--graph-node-status-endpoint=${GRAPH_NODE}'
+      - '--poifier-server=${POI_SERVER}'
+
 ```
 
 HINT:
