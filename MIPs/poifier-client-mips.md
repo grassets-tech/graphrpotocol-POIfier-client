@@ -72,7 +72,7 @@ services:
       - '--ethereum-endpoint=https://eth-qoerli.alchemyapi.io/v2/demo'
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
-      - '--poifier-server=https://poifier.io'
+      - '--poifier-server=https://goerli.poifier.io'
 
 ```
 
@@ -84,7 +84,7 @@ TOKEN=0x458xxxx1c
 ETH_ENDPOINT=https://eth-qoerli.alchemyapi.io/v2/demo
 SUBGRAPH_ENDPOINT=https://gateway.testnet.thegraph.com/network
 GRAPH_NODE=http://index-node-0:8030/graphql
-POI_SERVER=https://poifier.io
+POI_SERVER=https://goerli.poifier.io
 ```
 
 **more docker-compose.ymml**
