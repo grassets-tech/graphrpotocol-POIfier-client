@@ -60,6 +60,8 @@ services:
       - '--indexer-address=<INDEXER_ADDRESS>'
 
 ```
+NOTE:
+> You can provide either `--poifier-token` you got from [goerli.poifier.io](https://goerli.poifier.io) or `--mnemonic` and `--indexer-address` and token will be generated automatically.
 
 ## How to run
 
