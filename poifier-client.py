@@ -59,7 +59,7 @@ def parseArguments():
         type=str)
     parser.add_argument('--indexer-address',
         dest='indexer_address',
-        help='Indexer address',
+        help='Indexer address to generate poifier token',
         type=str) 
     return parser.parse_args()
 
