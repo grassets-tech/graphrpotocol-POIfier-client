@@ -15,6 +15,10 @@ import os
 import requests
 import sys
 import time
+from hdwallet import HDWallet
+from hdwallet.symbols import ETH
+from eth_account.messages import encode_defunct
+from web3 import Web3
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 INDEXER_REF = '0x0000000000000000000000000000000000000000'
@@ -49,7 +53,32 @@ def parseArguments():
         help='Ethereum endpoint to get block hash (default: %(default)s)',
         default='https://eth-mainnet.alchemyapi.io/v2/demo',
         type=str)
+    parser.add_argument('--mnemonic',
+        dest='mnemonic',
+        help='Operator mnemonic',
+        type=str)
+    parser.add_argument('--indexer-address',
+        dest='indexer_address',
+        help='Indexer address',
+        type=str) 
     return parser.parse_args()
+
+def getToken(mnemonic, ethereum_endpoint, indexer_address):
+    if not mnemonic:
+        logging.error('Operator mnemonic is not provided')
+    hdwallet = HDWallet(symbol=ETH)
+    hdwallet.from_mnemonic(mnemonic=mnemonic)
+    hdwallet.from_path(path="m/44'/60'/0'/0/0")
+    private_key = hdwallet.private_key()
+
+    web3 = Web3(Web3.HTTPProvider(ethereum_endpoint))
+    msghash = encode_defunct(text='RYABINA_POI_HUB')
+    sign_hash = web3.eth.account.sign_message(msghash, private_key)
+    logging.info('Message signed with: {}'.format(sign_hash.signature.hex()))
+    poifier_token = '{}:{}'.format(indexer_address.lower(),sign_hash.signature.hex())
+    logging.info('POIfier TOKEN: {}'.format(poifier_token))
+    return poifier_token
+
 
 def getSubgraphs(graphql_endpoint):
     client = GraphqlClient(endpoint=graphql_endpoint)
@@ -238,7 +267,11 @@ def main():
         logging.info('POI summary: deployments: {}, records: {}'.format(*getSummary(poi_report)))
         for item in poi_report:
             logging.info(item)
-        uploadPoi(args.poifier_server, args.poifier_token, poi_report)
+        if not args.poifier_token:
+            poifier_token = getToken(args.mnemonic, args.ethereum_endpoint, args.indexer_address)
+        else:
+            poifier_token = args.poifier_token
+        uploadPoi(args.poifier_server, poifier_token, poi_report)
         time.sleep(SLEEP)
 
 if __name__ == "__main__":
