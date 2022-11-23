@@ -56,6 +56,8 @@ services:
       - '--ethereum-endpoint=<ETHEREUM_ENDPOINT>'
       - '--mainnet-subgraph-endpoint=<MAINNET_GRAPH_SUBGRAPH>'
       - '--graph-node-status-endpoint=<GRAPH_NODE_ENDPOINT>'
+      - '--mnemonic=<Operator MNEMONIC>'
+      - '--indexer-address=<INDEXER_ADDRESS>'
 
 ```
 
