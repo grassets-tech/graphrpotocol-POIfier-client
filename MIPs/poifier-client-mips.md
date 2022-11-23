@@ -53,7 +53,11 @@ services:
       - '--ethereum-endpoint=<GOERLI_ENDPOINT>'
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=<GRAPH_NODE_ENDPOINT>'
+      - '--mnemonic=<OPERATOR MNEMONIC>'
+      - '--indexer-address=<INDEXER_ADDRESS>'
 ```
+NOTE:
+> You can provide either `--poifier-token` you got from [goerli.poifier.io](https://goerli.poifier.io) or `--mnemonic` and `--indexer-address` and token will be generated automatically.
 
 ## Docker compose example
 
@@ -73,6 +77,8 @@ services:
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
       - '--poifier-server=https://goerli.poifier.io'
+      - '--mnemonic=${MNEMONIC}'
+      - '--indexer-address=${INDEXER_ADDRESS}'
 
 ```
 
@@ -85,6 +91,8 @@ ETH_ENDPOINT=https://eth-qoerli.alchemyapi.io/v2/demo
 SUBGRAPH_ENDPOINT=https://gateway.testnet.thegraph.com/network
 GRAPH_NODE=http://index-node-0:8030/graphql
 POI_SERVER=https://goerli.poifier.io
+MNEMONIC='test test test'
+INDEXER_ADDRESS=0x123456
 ```
 
 **more docker-compose.ymml**
@@ -104,6 +112,8 @@ services:
       - '--mainnet-subgraph-endpoint=${SUBGRAPH_ENDPOINT}'
       - '--graph-node-status-endpoint=${GRAPH_NODE}'
       - '--poifier-server=${POI_SERVER}'
+      - '--mnemonic=${MNEMONIC}'
+      - '--indexer-address=${INDEXER_ADDRESS}'
 
 ```
 
