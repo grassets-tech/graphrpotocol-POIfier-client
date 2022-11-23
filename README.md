@@ -61,7 +61,7 @@ services:
 
 ```
 NOTE:
-> You can provide either `--poifier-token` you got from [goerli.poifier.io](https://goerli.poifier.io) or `--mnemonic` and `--indexer-address` and token will be generated automatically.
+> You can provide either `--poifier-token` you got from [poifier.io](https://poifier.io) or `--mnemonic` and `--indexer-address` and token will be generated automatically.
 
 ## How to run
 
