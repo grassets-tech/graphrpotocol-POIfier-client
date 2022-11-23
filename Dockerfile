@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.9.15-alpine3.16
 
 RUN apk --no-cache add gcc musl-dev
 
