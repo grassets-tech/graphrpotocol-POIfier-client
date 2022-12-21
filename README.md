@@ -87,3 +87,14 @@ options:
 If you run POIfier-client on `baremetal` do:
 
 ```pip3 install -r requirements.txt```
+
+# How to update container
+
+```
+sudo docker-compose stop poifier-client
+sudo docker rm poifier-client
+sudo docker image rm grassets/poifier-client
+sudo docker-compose up -d 
+sudo docker logs -f poifier-client
+
+```
