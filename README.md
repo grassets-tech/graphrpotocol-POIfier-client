@@ -37,11 +37,10 @@ Pull docker image
 ## Docker compose
 
 ```
-version: '2.1'
-
 networks:
   monitor-net:
     driver: bridge
+
 services:
   poifier-client:
     container_name: poifier-client
@@ -50,14 +49,12 @@ services:
        - monitor-net
     restart: unless-stopped
     tty: true
-    command:
-      - '--poifier-token=<POIFIER_TOKEN>'
-      - '--poifier-server=POIFIER_SERVER'
-      - '--ethereum-endpoint=<ETHEREUM_ENDPOINT>'
-      - '--mainnet-subgraph-endpoint=<MAINNET_GRAPH_SUBGRAPH>'
-      - '--graph-node-status-endpoint=<GRAPH_NODE_ENDPOINT>'
-      - '--mnemonic=<Operator MNEMONIC>'
-      - '--indexer-address=<INDEXER_ADDRESS>'
+    command: 
+      - '--graph-node-status-endpoint=${GRAPH_NODE}'
+      - '--poifier-server=${POI_SERVER}'
+      - '--mnemonic=${MNEMONIC}'
+      - '--indexer-address=${INDEXER_ADDRESS}'
+      - '--indexer-agent-epoch-subgraph-endpoint=${INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT}'
 
 ```
 NOTE:
@@ -67,28 +64,23 @@ NOTE:
 
 ```bash
 $ python3 poifier-client.py --help
-usage: poifier-client.py [-h] [--graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT] --poifier-token POIFIER_TOKEN [--poifier-server POIFIER_SERVER]
-                         [--mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT] [--ethereum-endpoint ETHEREUM_ENDPOINT]
+usage: poifier.py [-h] [--graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT] [--poifier-token POIFIER_TOKEN] --poifier-server POIFIER_SERVER --indexer-agent-epoch-subgraph-endpoint
+                  INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT [--mnemonic MNEMONIC] [--indexer-address INDEXER_ADDRESS]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --graph-node-status-endpoint GRAPH_NODE_STATUS_ENDPOINT
                         Graph-node status endpoint, (default: http://index-node-0:8030/graphql)
   --poifier-token POIFIER_TOKEN
-                        Auth token, request token via POIfier portal
+                        Auth token, request token via POIfier portal or provide keys --mnemonic and --indexer-address
   --poifier-server POIFIER_SERVER
                         URL of POIfier server (default: https://poifier.io)
-  --mainnet-subgraph-endpoint MAINNET_SUBGRAPH_ENDPOINT
-                        Graph network endpoint (default: https://gateway.network.thegraph.com/network)
-  --ethereum-endpoint ETHEREUM_ENDPOINT
-                        Ethereum endpoint to get block hash (default: https://eth-mainnet.alchemyapi.io/v2/demo)
+  --indexer-agent-epoch-subgraph-endpoint INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT
+                        Epoch subgraph for Epoch Oracle (default: )
+  --mnemonic MNEMONIC   Provide an Operator mnemonic if --poifier-token is not provided
+  --indexer-address INDEXER_ADDRESS
+                        Provide Indexer address if --poifier-token is not provided
 ```
-
-HINT:
-> For key `--mainnet_subgraph_endpoint` you can use mainnet subgraph which is indexed locally and stored in graph-node DB.
-> So, in case of docker infrastructure key would be similar to:
-> * `--mainnet_subgraph_endpoint http://query-node-0:8000/subgraphs/id/Qmf5XXWA8zhHbdvWqtPcR3jFkmb5FLR4MAefEYx8E3pHfr`
-
 
 # Requirements
 
