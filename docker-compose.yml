@@ -5,8 +5,7 @@ networks:
 services:
   poifier-client:
     container_name: poifier-client
-    build:
-      context: ./poifier
+    image: grassets/poifier-client
     networks:
        - monitor-net
     restart: unless-stopped
