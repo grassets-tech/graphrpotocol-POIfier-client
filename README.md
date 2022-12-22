@@ -88,6 +88,7 @@ If you run POIfier-client on `baremetal` do:
 
 ```pip3 install -r requirements.txt```
 
+>> WARNING:
 # How to update container
 
 ```
