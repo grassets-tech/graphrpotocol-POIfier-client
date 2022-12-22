@@ -88,8 +88,11 @@ If you run POIfier-client on `baremetal` do:
 
 ```pip3 install -r requirements.txt```
 
->> WARNING:
+
 # How to update container
+
+>> WARNING: if you configured all keys correctly, but service is still failing, you might have old version of image installed.
+>> Please do following to remove previous version and start docker again.
 
 ```
 sudo docker-compose stop poifier-client
