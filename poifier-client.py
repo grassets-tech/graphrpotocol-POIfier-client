@@ -126,7 +126,7 @@ def get_subgraphs(graphql_endpoint):
                 }
         for key, val in subgraphs.items():
             logging.info('{}:{}'.format(key,val))
-        return subgraphs
+    return subgraphs
 
 def get_last_n_epochs_from_oracle(graphql_endpoint):
     client = GraphqlClient(endpoint=graphql_endpoint)
@@ -285,9 +285,7 @@ def main():
         poifier_token = args.poifier_token if args.poifier_token else get_token(args.mnemonic, args.indexer_address)
         subgraphs = get_subgraphs(args.graph_node_status_endpoint)
         block_range = get_last_n_block_range(subgraphs)
-        print(block_range)
         block_hash_range = get_last_n_block_hash_range(block_range, args.graph_node_status_endpoint)
-        print(block_hash_range)
         epoch_range = get_last_n_epochs_from_oracle(args.indexer_agent_epoch_subgraph_endpoint)
         poi_by_block = get_poi_report_by_n_blocks(subgraphs, block_hash_range, args.graph_node_status_endpoint)
         poi_by_epoch = get_poi_report_by_n_epochs(subgraphs, epoch_range, args.graph_node_status_endpoint)
@@ -296,7 +294,9 @@ def main():
             logging.info(item)
         logging.info('----------------------------------------')
         logging.info('POI summary: deployments: {}, records: {}'.format(*getSummary(poi_report)))
-        logging.info('POI token: {}'.format(poifier_token))       
+        logging.info('POI token: {}'.format(poifier_token))
+        if len(poi_report) > 0:
+            upload_poi(args.poifier_server, poifier_token, poi_report)
         upload_poi(args.poifier_server, poifier_token, poi_report)
         logging.info('POIfier finished in {}'.format(time.time() - start_time))
         logging.info('----------------------------------------')
