@@ -297,7 +297,6 @@ def main():
         logging.info('POI token: {}'.format(poifier_token))
         if len(poi_report) > 0:
             upload_poi(args.poifier_server, poifier_token, poi_report)
-        upload_poi(args.poifier_server, poifier_token, poi_report)
         logging.info('POIfier finished in {}'.format(time.time() - start_time))
         logging.info('----------------------------------------')
         logging.info('POIfier sleeping ...')
