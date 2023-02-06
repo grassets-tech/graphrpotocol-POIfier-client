@@ -28,7 +28,13 @@ MSG = 'RYABINA_POI_HUB'
 CHAIN_BY_CAIP2_AlIAS = {
   'eip155:1': 'mainnet',
   'eip155:5': 'goerli',
-  'eip155:100': 'gnosis',  
+  'eip155:100': 'gnosis',
+  'eip155:42161': 'arbitrum-one',
+  'eip155:421613': 'arbitrum-goerli',
+  'eip155:43114': 'avalanche',
+  'eip155:137': 'polygon',
+  'eip155:42220': 'celo',
+  'eip155:10': 'optimism',
 }
 
 def parseArguments():
