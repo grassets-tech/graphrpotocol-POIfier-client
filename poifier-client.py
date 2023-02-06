@@ -209,14 +209,14 @@ def get_poi(indexer_id, block_number, block_hash, subgraph_ipfs_hash, graphql_en
         data = client.execute(query=query)
     except requests.exceptions.RequestException as e:
         logging.error('Can\'t get POI, check endpoint {}'.format(e))
-        sys.exit()
+        return
     logging.info('Received POI data: {}'.format(data))
     if data.get('errors'):
         logging.error('Can\'t get POI, check query {}'.format(data))
-        sys.exit()
+        return
     if len(data.get('data')) == 0:
         logging.error('Can\'t get POI, check endpoint {}'.format(e))
-        sys.exit()
+        return
     poi = data['data']['proofOfIndexing']
     if not poi:
         logging.info('Warning: no POI found for subgraph {}'.format(subgraph_ipfs_hash))
